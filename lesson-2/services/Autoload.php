@@ -1,4 +1,5 @@
 <?php
+
 namespace app\services;
 class Autoload
 {
@@ -6,9 +7,9 @@ class Autoload
     {
         $file = str_replace('\\', '/', $_SERVER['DOCUMENT_ROOT'] . '/../'
             . mb_substr($className, 4) . '.php');
-            if (file_exists($file)) {
-                include $file;
-            }
-        
+        if (file_exists($file)) {
+            include $file;
+        }
+
     }
 }
