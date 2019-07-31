@@ -1,0 +1,110 @@
+<?php
+
+namespace app\models\repositories;
+
+use app\models\entities\Entity;
+use app\services\Db;
+
+/**
+ * Class Repository
+ * @package app\models
+ *
+ */
+abstract class Repository
+{
+  /**
+   * @var Db Класс для работы с базой данных
+   */
+  protected $db;
+
+  /**
+   * Model constructor.
+   */
+  public function __construct()
+  {
+    $this->db = Db::getInstance();
+  }
+
+  /**
+   * Данный метод должен вернуть название таблицы
+   * @return string
+   */
+  abstract protected function getTableName();
+
+  /**
+   * @return string
+   */
+
+  abstract protected function getEntityName();
+
+  /**
+   * Возращает запись с указанным id
+   *
+   * @param int $id ID Записи таблицы
+   * @return array
+   */
+  public function getOne($id)
+  {
+    $tableName = $this->getTableName();
+    $sql = "SELECT * FROM {$tableName} WHERE id = :id";
+    return $this->db->queryObject(
+      $sql,
+      $this->getEntityName(),
+      [':id' => $id]
+    );
+  }
+
+  /**
+   * Получение всех записей таблицы
+   * @return mixed
+   */
+  public function getAll()
+  {
+    $tableName = $this->getTableName();
+    $sql = "SELECT * FROM {$tableName} ";
+    return $this->bd->queryObjects($sql, $this->getEntityName());
+  }
+
+  public function delete(Entity $entity)
+  {
+    $tableName = $this->getTableName();
+    $sql = "DELETE FROM {$tableName} WHERE id = :id";
+    return $this->db->execute($sql, [':id' => $entity->id]);
+  }
+
+  public function save(Entity $entity)
+  {
+
+    if (empty($entity->id)) {
+      return $this->create($entity);
+    }
+    return $this->update($entity);
+  }
+
+  protected function create(Entity $entity)
+  {
+    $tableName = $this->getTableName();
+    $cols = implode(', ', $entity->getAttributes());
+    $values = [];
+    $params = [];
+    foreach ($entity as $key => $value) {
+      if ($key == 'db') {
+        continue;
+      }
+      $params[":$key"] = $value;
+      $values[] = ":$key";
+    }
+    $sql = "INSERT INTO {$tableName} ({$cols}) values (" . implode(', ', $values) . ')';
+    $this->db->execute($sql, $params);
+    $errInfo = $this->db->errors[0]['info'][2];
+    if (!is_null($errInfo)) {
+      echo "PDO Error: {$errInfo}";
+      return false;
+    }
+    return true;
+  }
+  protected function update(Entity $entity)
+  {
+
+  }
+}
