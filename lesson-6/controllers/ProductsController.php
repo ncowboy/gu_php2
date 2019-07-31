@@ -3,9 +3,8 @@
 
 namespace app\controllers;
 
-use app\models\Product;
+use app\models\repositories\ProductRepository;
 use app\services\Controller;
-use app\services\Request;
 use Exception;
 
 class ProductsController extends Controller
@@ -13,7 +12,7 @@ class ProductsController extends Controller
   public function indexAction()
   {
     echo $this->render('catalog', [
-      'items' => Product::getAll()
+      'items' => (new ProductRepository())->getAll()
     ]);
   }
 
@@ -22,7 +21,7 @@ class ProductsController extends Controller
    */
   public function viewAction()
   {
-    $product = Product::getOne($this->getId());
+    $product = (new ProductRepository())->getOne($this->getId());
     if (!$product) {
       throw new Exception('Товар не найден');
     }

@@ -13,7 +13,7 @@ class TwigRenderServices implements IRenderService
   {
     $loader = new FilesystemLoader($this->tmplPath);
     $twig = new Environment($loader);
-    $template = $twig->loadTemplate("{$template}.tmpl");
+    $template = $twig->loadTemplate("{$template}.twig");
     return $template->render($params);
   }
 
