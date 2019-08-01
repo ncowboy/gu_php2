@@ -41,7 +41,7 @@ class Session
    * @param $child
    * @return bool|mixed
    */
-  public static function read($key, $child)
+  public static function read($key, $child = null)
   {
     self::start();
     if (isset($_SESSION[$key]) && !$child) {

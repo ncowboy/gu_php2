@@ -1,6 +1,6 @@
 <?php
-
 include $_SERVER['DOCUMENT_ROOT'] . '/../vendor/autoload.php';
+var_dump(\app\services\Session::read('cart_id'));
 $request = new \app\services\Request();
 $controllerName = $request->getControllerName() ?: 'products';
 $actionName = $request->getActionName();

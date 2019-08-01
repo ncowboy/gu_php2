@@ -12,7 +12,8 @@ class ProductsController extends Controller
   public function indexAction()
   {
     echo $this->render('catalog', [
-      'items' => (new ProductRepository())->getAll()
+      'items' => (new ProductRepository())->getAll(),
+      'session' => $_SESSION
     ]);
   }
 
