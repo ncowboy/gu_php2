@@ -20,6 +20,11 @@ class Cart extends Entity
     return $this->id;
   }
 
+  public function __construct()
+  {
+    $this->created_at = date("Y-m-d H:i:s");
+  }
+
   /**
    * @return mixed
    */

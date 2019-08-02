@@ -40,9 +40,14 @@ class CartController extends Controller
   protected function updateCart($cart_id, $post)
   {
      $id_product = $post['cart']['product_id'];
-     $productInCart = (new CartRepository())->getByParams([
+     $cartRepo = new CartRepository();
+     $cart = $cartRepo->getByParams([
        'product_id' => $id_product,
-       'cart_id' => $cart_id
+       'id' => $cart_id
        ]);
+     if($cart) {
+       $cart->quantity += $post['quantity'];
+       return $ca
+     }
   }
 }

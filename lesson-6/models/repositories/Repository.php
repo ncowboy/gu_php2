@@ -65,7 +65,11 @@ abstract class Repository
         $queryParams[":{$key}"] = $value;
     }
     $sql .= implode(' AND ', $values);
-    var_dump($sql);
+    return $this->db->queryObject(
+      $sql,
+      $this->getEntityName(),
+      $queryParams
+    );
   }
 
   /**
