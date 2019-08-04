@@ -14,7 +14,7 @@ $('.cart-button').click(function (event) {
   const $this = $(this);
   const $form = $this.parent().parent();
   const $add_url = $form.attr('action');
-  const $get_url = '/api/cart/get?id=';
+  const $get_url = '/cart/get?id=';
   const $id = $this.data('id');
   const $qty = $form.find(`input[name="cart${$id}[quantity]"]`).val();
   $.post($add_url, {

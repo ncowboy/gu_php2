@@ -4,6 +4,7 @@ namespace app\models\repositories;
 
 use app\models\entities\Entity;
 use app\services\Db;
+use app\services\Session;
 
 /**
  * Class Repository
@@ -65,7 +66,8 @@ abstract class Repository
         $queryParams[":{$key}"] = $value;
     }
     $sql .= implode(' AND ', $values);
-    return $this->db->queryObject(
+    Session::write('sql', $sql);
+    return $this->db->queryObjects(
       $sql,
       $this->getEntityName(),
       $queryParams

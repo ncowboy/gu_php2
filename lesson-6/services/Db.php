@@ -10,10 +10,10 @@ class Db
   use TSingleton;
 
   private $config = [
-    'user' => 'dbuser',
-    'pass' => 'dbpass',
+    'user' => 'root',
+    'pass' => 'Lopig1983',
     'driver' => 'mysql',
-    'bd' => 'dbname',
+    'bd' => 'phpl2',
     'host' => 'localhost',
     'charset' => 'UTF8',
   ];
@@ -134,5 +134,10 @@ class Db
   public function execute(string $sql, array $params = [])
   {
     $this->query($sql, $params);
+  }
+
+  public function getLastInsertedId()
+  {
+      return $this->getConnect()->lastInsertId();
   }
 }

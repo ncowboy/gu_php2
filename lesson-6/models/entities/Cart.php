@@ -7,8 +7,7 @@ namespace app\models\entities;
 class Cart extends Entity
 {
   public $id;
-  public $product_id;
-  public $quantity;
+  public $status;
   public $id_order = null;
   public $created_at;
 
@@ -23,39 +22,9 @@ class Cart extends Entity
   public function __construct()
   {
     $this->created_at = date("Y-m-d H:i:s");
+    $this->status = '1';
   }
 
-  /**
-   * @return mixed
-   */
-  public function getProductId()
-  {
-    return $this->product_id;
-  }
-
-  /**
-   * @param mixed $product_id
-   */
-  public function setProductId($product_id): void
-  {
-    $this->product_id = $product_id;
-  }
-
-  /**
-   * @return mixed
-   */
-  public function getQuantity()
-  {
-    return $this->quantity;
-  }
-
-  /**
-   * @param mixed $quantity
-   */
-  public function setQuantity($quantity): void
-  {
-    $this->quantity = $quantity;
-  }
 
   /**
    * @return null
@@ -72,6 +41,22 @@ class Cart extends Entity
   {
     $this->id_order = $id_order;
   }
+
+    /**
+     * @return mixed
+     */
+    public function getStatus()
+    {
+        return $this->status;
+    }
+
+    /**
+     * @param mixed $status
+     */
+    public function setStatus($status): void
+    {
+        $this->status = $status;
+    }
 
   /**
    * @return mixed

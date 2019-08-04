@@ -13,7 +13,6 @@ class ProductsController extends Controller
   {
     echo $this->render('catalog', [
       'items' => (new ProductRepository())->getAll(),
-      'session' => $_SESSION
     ]);
   }
 
