@@ -66,7 +66,7 @@ function renderCart(cart) {
 
 $('.cart-content').click(function (event) {
   if(event.target.tagName === 'BUTTON'){
-    $.post('api/cart/delete', {"id": event.target.dataset.id},
+    $.post('/cart/clear', {"id": event.target.dataset.id},
       function (data) {
         if(!JSON.parse(data).errors){
           clearCart();

@@ -11,9 +11,9 @@ class Db
 
   private $config = [
     'user' => 'root',
-    'pass' => 'Lopig1983',
+    'pass' => '',
     'driver' => 'mysql',
-    'bd' => 'phpl2',
+    'bd' => 'gu_php1_l6',
     'host' => 'localhost',
     'charset' => 'UTF8',
   ];

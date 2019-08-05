@@ -12,7 +12,8 @@ class TwigRenderServices implements IRenderService
   public function renderTmpl($template, $params = [])
   {
     $loader = new FilesystemLoader($this->tmplPath);
-    $twig = new Environment($loader);
+    $twig = new Environment($loader, ['debug' => true]);
+    $twig->addExtension(new \Twig\Extension\DebugExtension());
     $template = $twig->loadTemplate("{$template}.twig");
     return $template->render($params);
   }

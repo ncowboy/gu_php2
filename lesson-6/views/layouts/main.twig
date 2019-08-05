@@ -22,25 +22,24 @@
         <li class="nav-item">
           <a class="nav-link " href="/products">Каталог</a>
         </li>
-<!--        <li class="nav-item">-->
-<!--          <a class="nav-link" href="/?c=feedbacks">Отзывы</a>-->
-<!--        </li>-->
       </ul>
-        <a href="/login" class="nav-link">Вход</a>
-        <a href="/register" class="nav-link">Регистрация</a>
+      <a href="/login" class="nav-link">Вход</a>
+      <a href="/register" class="nav-link">Регистрация</a>
       <button class="btn cart-toggle btn-success ml-3" type="button"><i
             class="fas fa-shopping-cart"></i> <span
-            class="cart-count badge badge-light"></span>
+            class="cart-count badge badge-light">
+          {{ count }}
+        </span>
       </button>
     </div>
   </nav>
   <div class="d-flex justify-content-end text-center">
-
+    {{ cart | raw }}
   </div>
 </header>
 <main>
   <div class="container">
-    {{ content | raw}}
+    {{ content | raw }}
   </div>
 </main>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>

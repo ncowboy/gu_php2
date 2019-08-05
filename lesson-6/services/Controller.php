@@ -3,7 +3,7 @@
 
 namespace app\services;
 
-
+use app\models\repositories\ProductInCartRepository;
 use App\services\renders\IRenderService;
 
 abstract class Controller
@@ -33,8 +33,13 @@ abstract class Controller
   public function render($template, $params = [])
   {
     $content = $this->renderTmpl($template, $params);
+    $id_cart = Session::read('id_cart');
+    $cart = $id_cart ? $this->renderTmpl('cart_header', $this->renderCart($id_cart)) : null;
+    $count = $id_cart ? $this->getCartCount($id_cart) : null;
     return $this->renderTmpl('layouts/main', [
-      'content' => $content
+      'content' => $content,
+      'cart' => $cart,
+      'count' => $count
     ]);
   }
 
@@ -46,5 +51,31 @@ abstract class Controller
   public function getId()
   {
     return $this->request->getId();
+  }
+
+  protected function renderCart($id_cart)
+  {
+    $result = [];
+    $productInCartRepo = new ProductInCartRepository();
+    $productsInCart = $productInCartRepo->getByParams(['cart_id' => $id_cart]);
+    foreach ($productsInCart as $value) {
+      $arrValue = (array)$value;
+      $arrValue['price'] = $value->getProduct()->price;
+      $arrValue['name'] = $value->getProduct()->name;
+      $arrValue['img'] = $value->getProduct()->img;
+      $result[] = $arrValue;
+    }
+    return $result;
+  }
+
+  protected function getCartCount($id_cart)
+  {
+    $result = 0;
+    $productInCartRepo = new ProductInCartRepository();
+    $productsInCart = $productInCartRepo->getByParams(['cart_id' => $id_cart]);
+    foreach ($productsInCart as $value) {
+      $result += $value->quantity;
+    }
+    return $result;
   }
 }

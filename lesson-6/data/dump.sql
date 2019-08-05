@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Хост: 127.0.0.1:3306
--- Время создания: Июл 29 2019 г., 13:41
+-- Время создания: Авг 05 2019 г., 16:28
 -- Версия сервера: 5.7.25
 -- Версия PHP: 7.0.32
 
@@ -40,22 +40,8 @@ CREATE TABLE `carts` (
 --
 
 INSERT INTO `carts` (`id`, `status`, `id_order`, `created_at`) VALUES
-(41, 1, NULL, '2019-07-04 10:22:26'),
-(42, 1, NULL, '2019-07-04 10:32:05'),
-(43, 1, NULL, '2019-07-04 10:33:22'),
-(44, 1, NULL, '2019-07-04 10:34:05'),
-(45, 1, NULL, '2019-07-04 10:36:37'),
-(48, 1, NULL, '2019-07-04 11:35:28'),
-(49, 1, NULL, '2019-07-04 11:35:28'),
-(57, 1, NULL, '2019-07-04 11:51:51'),
-(58, 1, NULL, '2019-07-04 11:51:51'),
-(70, 1, NULL, '2019-07-04 12:57:57'),
-(71, 2, 3, '2019-07-04 13:51:45'),
-(72, 2, 4, '2019-07-04 13:58:58'),
-(73, 2, 5, '2019-07-04 14:11:34'),
-(74, 2, 6, '2019-07-04 14:12:41'),
-(75, 2, 7, '2019-07-04 14:45:03'),
-(78, 1, NULL, '2019-07-04 14:46:21');
+(83, 1, NULL, '2019-08-05 12:24:58'),
+(84, 1, NULL, '2019-08-05 12:47:37');
 
 -- --------------------------------------------------------
 
@@ -156,43 +142,21 @@ INSERT INTO `products` (`id`, `name`, `img`, `description`, `price`) VALUES
 --
 
 CREATE TABLE `products_in_cart` (
+  `id` int(11) NOT NULL,
   `product_id` int(11) NOT NULL,
   `cart_id` int(11) NOT NULL,
-  `quantity` int(11) NOT NULL
+  `quantity` tinyint(2) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Дамп данных таблицы `products_in_cart`
 --
 
-INSERT INTO `products_in_cart` (`product_id`, `cart_id`, `quantity`) VALUES
-(3, 41, 6),
-(2, 41, 1),
-(1, 41, 1),
-(4, 41, 7),
-(4, 42, 2),
-(3, 42, 1),
-(4, 43, 1),
-(1, 44, 1),
-(2, 44, 1),
-(4, 44, 1),
-(3, 45, 5),
-(4, 45, 10),
-(2, 45, 1),
-(2, 48, 2),
-(2, 49, 1),
-(3, 57, 1),
-(3, 58, 1),
-(4, 70, 3),
-(4, 71, 4),
-(3, 72, 1),
-(2, 73, 3),
-(3, 74, 5),
-(3, 75, 2),
-(2, 75, 1),
-(1, 75, 4),
-(4, 75, 4),
-(2, 78, 1);
+INSERT INTO `products_in_cart` (`id`, `product_id`, `cart_id`, `quantity`) VALUES
+(20, 2, 83, 3),
+(21, 3, 83, 3),
+(22, 1, 83, 1),
+(23, 4, 83, 3);
 
 -- --------------------------------------------------------
 
@@ -289,8 +253,9 @@ ALTER TABLE `products`
 -- Индексы таблицы `products_in_cart`
 --
 ALTER TABLE `products_in_cart`
-  ADD KEY `products_in_cart_ibfk_1` (`cart_id`),
-  ADD KEY `products_in_cart_ibfk_2` (`product_id`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `cart_id` (`cart_id`),
+  ADD KEY `product_id` (`product_id`);
 
 --
 -- Индексы таблицы `roles`
@@ -313,7 +278,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT для таблицы `carts`
 --
 ALTER TABLE `carts`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=79;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=85;
 
 --
 -- AUTO_INCREMENT для таблицы `feedbacks`
@@ -337,7 +302,13 @@ ALTER TABLE `order_statuses`
 -- AUTO_INCREMENT для таблицы `products`
 --
 ALTER TABLE `products`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
+-- AUTO_INCREMENT для таблицы `products_in_cart`
+--
+ALTER TABLE `products_in_cart`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=38;
 
 --
 -- AUTO_INCREMENT для таблицы `roles`
@@ -372,8 +343,8 @@ ALTER TABLE `orders`
 -- Ограничения внешнего ключа таблицы `products_in_cart`
 --
 ALTER TABLE `products_in_cart`
-  ADD CONSTRAINT `products_in_cart_ibfk_1` FOREIGN KEY (`cart_id`) REFERENCES `carts` (`id`) ON DELETE CASCADE,
-  ADD CONSTRAINT `products_in_cart_ibfk_2` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`) ON DELETE CASCADE;
+  ADD CONSTRAINT `products_in_cart_ibfk_1` FOREIGN KEY (`cart_id`) REFERENCES `carts` (`id`),
+  ADD CONSTRAINT `products_in_cart_ibfk_2` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`);
 
 --
 -- Ограничения внешнего ключа таблицы `users`
