@@ -1,0 +1,33 @@
+{% extends 'layouts/main.twig' %}
+{% block cart %}
+  <div class="cart">
+    xnjnjnfv d if,kjyt
+    {{ cart }}
+  </div>
+
+
+{#  <div class="cart-content hidden">#}
+{#    {% set count = 0 %}#}
+{#    {% set sum = 0 %}#}
+{#    {% for key, product in _context %}#}
+{#      {% if key is not same as('_parent') and#}
+{#        key is not same as('count') and#}
+{#        key is not same as('sum') %}#}
+{#        <div class="cart-item">#}
+{#          <div class="cart-item-img">#}
+{#            <img src="/uploads/{{ product.img }}" alt="{{ product.name }}">#}
+{#          </div>#}
+{#          <div class="cart-item-name">{{ product.name }}</div>#}
+{#          <div class="cart-item-qty">{{ product.quantity }}</div>#}
+{#          <div class="cart-item-sum">{{ product.quantity * product.price }}</div>#}
+{#        </div>#}
+{#        {% set count = count +  product.quantity %}#}
+{#        {% set sum = sum +  product.quantity *  product.price %}#}
+{#      {% endif %}#}
+{#    {% endfor %}#}
+{#    <p class="text-center"><span class="cart-count">{{ count }}</span> товаров на сумму <span#}
+{#          class="cart-sum">{{ sum }}</span> р. </p>#}
+{#    <button class="cart-clear btn btn-danger mb-3" data-id="{{ _context.0.cart_id }}">Очистить корзину</button>#}
+{#    <a href="/checkout" class="btn btn-success mb-3">Оформить заказ</a>#}
+{#  </div>#}
+{% endblock %}
