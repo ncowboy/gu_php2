@@ -2,6 +2,7 @@
 
 namespace app\models\repositories;
 
+use app\App;
 use app\models\entities\Entity;
 use app\services\Db;
 use app\services\Session;
@@ -23,7 +24,7 @@ abstract class Repository
    */
   public function __construct()
   {
-    $this->db = Db::getInstance();
+    $this->db = App::call()->db;
   }
 
   /**

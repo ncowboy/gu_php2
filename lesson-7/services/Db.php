@@ -7,16 +7,13 @@ use PDO;
 
 class Db
 {
-  use TSingleton;
 
-  private $config = [
-    'user' => 'root',
-    'pass' => '',
-    'driver' => 'mysql',
-    'bd' => 'gu_php1_l6',
-    'host' => 'localhost',
-    'charset' => 'UTF8',
-  ];
+  private $config;
+
+  public function __construct($config)
+  {
+    $this->config = $config;
+  }
 
   /**
    * @var PDO|null
@@ -136,6 +133,9 @@ class Db
     $this->query($sql, $params);
   }
 
+  /**
+   * @return string
+   */
   public function getLastInsertedId()
   {
       return $this->getConnect()->lastInsertId();

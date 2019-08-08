@@ -1,3 +1,6 @@
+{% set user = _context.0.authUser %}
+{% set cart = _context.0.cart %}
+{% set count = _context.0.count %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -20,21 +23,23 @@
     <div class="navbar-collapse collapse d-flex justify-content-end" id="navbarCollapse" style="">
       <ul class="navbar-nav bd-navbar-nav flex-row mr-5">
         <li class="nav-item">
-          <a class="nav-link " href="/products">Каталог</a>
+          <a class="nav-link" href="/products">Каталог</a>
         </li>
       </ul>
-      <a href="/login" class="nav-link">Вход</a>
-      <a href="/register" class="nav-link">Регистрация</a>
+      {% if(user) %}
+        <a href="#" class="nav-link">{{ user.name }}</a><a href="/site/logout">выход</a>
+      {% else %}
+        <a href="/site/login" class="nav-link">Вход</a>
+        <a href="/site/register" class="nav-link">Регистрация</a>
+      {% endif %}
       <button class="btn cart-toggle btn-success ml-3" type="button"><i
-            class="fas fa-shopping-cart"></i> <span
-            class="cart-count badge badge-light">
-        </span>
+            class="fas fa-shopping-cart"></i>
+        <span class="cart-count badge badge-light">{% if(count is not same as(0)) %}{{ count }}{% endif %}</span>
       </button>
     </div>
   </nav>
   <div class="d-flex justify-content-end text-center">
-    {% block cart %}
-    {% endblock %}
+    {% include 'cart_header.twig' with {'cart':  cart, 'count': count} %}
   </div>
 </header>
 <main>

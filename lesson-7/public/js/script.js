@@ -1,4 +1,4 @@
-  "use strict";
+"use strict";
 /* Cart visibility */
 
 const cartBtn = document.querySelector('.cart-toggle');
@@ -22,9 +22,9 @@ $('.cart-button').click(function (event) {
       product_id: $id,
       quantity: $qty,
     }
-  }, function(data) {
+  }, function (data) {
     let json_data = JSON.parse(data);
-    if(!json_data.errors){
+    if (!json_data.errors) {
       $.get(`${$get_url}${json_data.cart_id}`, function (data) {
         renderCart(JSON.parse(data));
       });
@@ -41,11 +41,12 @@ function renderCart(cart) {
     html += `
     <div class="cart-item">
         <div class="cart-item-img">
-          <img src="uploads/${el.img}" alt="${el.name}">
+          <img src="/uploads/${el.img}" alt="${el.name}">
         </div>
         <div class="cart-item-name">${el.name}</div>
         <div class="cart-item-qty">${el.quantity}</div>
         <div class="cart-item-sum">${el.quantity * el.price}</div>
+        <div class="cart-item-decrease"><a href="#" data-cart="${el.cart_id}" data-product="${el.product_id}"><i class="fas fa-times-circle"></i></a></div>
       </div>
     `;
     count += +el.quantity;
@@ -55,27 +56,41 @@ function renderCart(cart) {
   <p class="text-center"><span class="cart-count">${count}</span> товаров на сумму <span
             class="cart-sum">${sum}</span> р. </p>
     <button class="cart-clear btn btn-danger mb-3" data-id="${cart[0].cart_id}">Очистить корзину</button>
-    <a href="/checkout" class="btn btn-success mb-3">Оформить заказ</a>
+    <a href="/site/checkout" class="btn btn-success mb-3">Оформить заказ</a>
   `;
   clearCart();
-   $('.cart-content').html(html);
-   $('.cart-count').html(count);
+  $('.cart-content').html(html);
+  $('.cart-count').html(count);
 }
 
 //delete cart
 
 $('.cart-content').click(function (event) {
-  if(event.target.tagName === 'BUTTON'){
+  if (event.target.tagName === 'BUTTON') {
     $.post('/cart/clear', {"id": event.target.dataset.id},
       function (data) {
-        if(!JSON.parse(data).errors){
+        if (!JSON.parse(data).errors) {
           clearCart();
+        }
+      }
+    );
+  } else if (event.target.tagName === 'A' && event.target.dataset.cart) {
+    event.preventDefault();
+    $.post('/cart/decrease', {
+        "cart_id": event.target.dataset.cart,
+        "product_id": event.target.dataset.product
+      },
+      function (data) {
+        if (!JSON.parse(data).errors) {
+          let json_data = JSON.parse(data);
+          $.get(`${'/cart/get?id='}${json_data.cart_id}`, function (data) {
+            JSON.parse(data).length !== 0 ? renderCart(JSON.parse(data)) : clearCart();
+          });
         }
       }
     );
   }
 });
-
 function clearCart() {
   $('.cart-content').html('');
   $('.cart-count').html('');

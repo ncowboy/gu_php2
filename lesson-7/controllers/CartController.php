@@ -4,10 +4,9 @@
 namespace app\controllers;
 
 
+use app\App;
 use app\models\entities\Cart;
 use app\models\entities\ProductInCart;
-use app\models\repositories\CartRepository;
-use app\models\repositories\ProductInCartRepository;
 use app\services\Controller;
 use app\services\Session;
 use mysql_xdevapi\Exception;
@@ -18,11 +17,10 @@ class CartController extends Controller
   {
     $post = $this->request->post();
     $response = [];
-    $cartRepo = new CartRepository();
     $cart_id = $this->isCartExist();
     if (isset($post) && !$cart_id) {
       $cart = new Cart();
-      $cart_id = $cartRepo->save($cart);
+      $cart_id = App::call()->cartRepository->save($cart);
       if ($cart_id) {
         Session::write('id_cart', $cart_id);
         $this->addProductInCart($cart_id, $post);
@@ -37,8 +35,8 @@ class CartController extends Controller
   public function getAction()
   {
     $response = [];
-    $productInCartRepo = new ProductInCartRepository();
-    $productsInCart = $productInCartRepo->getByParams(['cart_id' => $this->request->getId()]);
+    $productsInCart = App::call()->productsInCartRepository
+      ->getByParams(['cart_id' => $this->request->getId()]);
     foreach ($productsInCart as $value) {
       $arrValue = (array)$value;
       $arrValue['price'] = $value->getProduct()->price;
@@ -53,10 +51,10 @@ class CartController extends Controller
   {
     $id = $this->request->post('id');
     if ($id) {
-      $productsInCartRepo = new ProductInCartRepository();
-      $productsInCart = $productsInCartRepo->getByParams(['cart_id' => $id]);
+      $productsInCart = App::call()->productsInCartRepository
+        ->getByParams(['cart_id' => $id]);
       foreach ($productsInCart as $entity) {
-        $productsInCartRepo->delete($entity);
+        App::call()->productsInCartRepository->delete($entity);
       };
       echo json_encode(['errors' => 0]);
     } else {
@@ -66,12 +64,12 @@ class CartController extends Controller
 
   protected function addProductInCart($cart_id, $post)
   {
-    $productInCartRepo = new ProductInCartRepository();
+    $repo = App::call()->productsInCartRepository;
     $productInCart = new ProductInCart();
     $productInCart->setCartId($cart_id);
     $productInCart->setProductId($post['cart']['product_id']);
     $productInCart->setQuantity($post['cart']['quantity']);
-    return $productInCartRepo->save($productInCart);
+    return $repo->save($productInCart);
   }
 
   protected function isCartExist()
@@ -82,20 +80,41 @@ class CartController extends Controller
   protected function updateCart($cart_id, $post)
   {
     $id_product = $post['cart']['product_id'];
-    $productInCartRepo = new ProductInCartRepository();
-    $productInCart = $productInCartRepo->getByParams([
+    $repo = App::call()->productsInCartRepository;
+    $productInCart = $repo->getByParams([
       'product_id' => $id_product,
       'cart_id' => $cart_id
     ])[0];
     if ($productInCart) {
       $productInCart->quantity += $post['cart']['quantity'];
-      return $productInCartRepo->save($productInCart);
+      return $repo->save($productInCart);
     } else {
       $productInCart = new ProductInCart();
       $productInCart->setQuantity($post['cart']['quantity']);
       $productInCart->setProductId($post['cart']['product_id']);
       $productInCart->setCartId($cart_id);
-      return $productInCartRepo->save($productInCart);
+      return $repo->save($productInCart);
+    }
+  }
+
+  public function decreaseAction()
+  {
+    $post = $this->request->post() ?? null;
+    if (!is_null($post)) {
+      $repo = App::call()->productsInCartRepository;
+      $product = $repo->getByParams([
+        'product_id' => $post['product_id'],
+        'cart_id' => $post['cart_id']
+      ])[0];
+      $qty = $product->getQuantity();
+      if((int)$qty === 1) {
+         $repo->delete($product);
+      } else {
+        $product->setQuantity(--$qty);
+        $repo->save($product);
+      }
+      $response['cart_id'] = $post['cart_id'];
+      echo json_encode($response);
     }
   }
 }

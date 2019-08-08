@@ -52,4 +52,10 @@ class Session
       return false;
     }
   }
+
+  public static function unset($key)
+  {
+    self::start();
+    unset($_SESSION[$key]);
+  }
 }

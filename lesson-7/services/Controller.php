@@ -3,9 +3,15 @@
 
 namespace app\services;
 
+use app\App;
 use app\models\repositories\ProductInCartRepository;
 use App\services\renders\IRenderService;
 
+/**
+ * Class Controller
+ * @package app\services
+ * @property Request $request
+ */
 abstract class Controller
 {
   protected $defaultAction = 'index';
@@ -33,13 +39,15 @@ abstract class Controller
 
   public function render($template, $params = [])
   {
-//    $id_cart = Session::read('id_cart');
-//    $cart = $id_cart ? $this->renderCart($id_cart) : null;
-//    $count = $id_cart ? $this->getCartCount($id_cart) : null;
-//    $params[] = [
-//      'cart' => $cart,
-//      'count' => $count
-//    ];
+    $id_cart = Session::read('id_cart');
+    $cart = $id_cart ? $this->renderCart($id_cart) : null;
+    $count = $id_cart ? $this->getCartCount($id_cart) : null;
+    $authUser = App::call()->user->getUser();
+    $params[] = [
+      'cart' => $cart,
+      'count' => $count,
+      'authUser' => is_null($authUser) ? false : (array)$authUser
+    ];
     return $this->renderer->renderTmpl($template, $params);
   }
 
@@ -77,5 +85,16 @@ abstract class Controller
       $result += $value->quantity;
     }
     return $result;
+  }
+
+  /**
+   * @param string $path
+   */
+  protected function redirect($path = '')
+  {
+    if (empty($path)) {
+      $path = $_SERVER['HTTP_REFERER'];
+    }
+    return header('Location:' . $path);
   }
 }
