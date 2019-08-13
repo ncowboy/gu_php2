@@ -13,7 +13,7 @@ use app\traits\TSingleton;
  * @property $user
  * @property $productsInCartRepository
  * @property $cartRepository
- * @property $productInCartRepository
+ * @property $productRepository
  * @property $userRepository
  */
 class App
