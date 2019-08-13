@@ -1,0 +1,46 @@
+{% extends 'layouts/main.twig' %}
+{% block body %}
+  <h1>Заказ №{{ order.id }} оформлен</h1>
+  <h2>Детали заказа: </h2>
+  <table class="table table-striped">
+    <tr>
+      <th>Имя</th>
+      <td>{{ order.name }}</td>
+    </tr>
+    <tr>
+      <th>Телефон</th>
+      <td>{{ order.phone }}</td>
+    </tr>
+    <tr>
+      <th>Адрес</th>
+      <td>{{ order.address }}</td>
+    </tr>
+    <tr>
+      <th>Информация</th>
+      <td>{{ order.info }}</td>
+    </tr>
+  </table>
+
+  <h2>Состав заказа: </h2>
+  <table class="table table-striped table-hover">
+    <tr>
+      <th>#</th>
+      <th>Товар</th>
+      <th>Цена</th>
+      <th>Количество</th>
+      <th>Стоимость</th>
+    </tr>
+    {% set total = 0 %}
+    {% for key, product in products %}
+      <tr>
+        <th>{{ key + 1 }}</th>
+        <th>{{ product.name }}</th>
+        <th>{{ product.price }} р.</th>
+        <th>{{ product.quantity }}</th>
+        <th>{{ product.price * product.quantity }} р.</th>
+      </tr>
+      {% set total = total + product.price * product.quantity %}
+    {% endfor %}
+  </table>
+  <h3>Итого: {{ total }} р.</h3>
+{% endblock %}
