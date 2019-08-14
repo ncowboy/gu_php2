@@ -12,6 +12,9 @@ use app\services\Session;
 
 class CartController extends Controller
 {
+    /**
+     *
+     */
   public function addAction()
   {
     $post = $this->request->post();
@@ -31,6 +34,9 @@ class CartController extends Controller
     echo json_encode($response);
   }
 
+    /**
+     *
+     */
   public function getAction()
   {
     $response = [];
@@ -71,6 +77,9 @@ class CartController extends Controller
     return $repo->save($productInCart);
   }
 
+    /**
+     * @return bool|mixed
+     */
   protected function isCartExist()
   {
     return Session::read('id_cart');
