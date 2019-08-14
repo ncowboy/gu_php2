@@ -16,9 +16,10 @@ class ProductsControllerTest extends \PHPUnit\Framework\TestCase
     $mockController = $this->getMockBuilder(ProductsController::class)
       ->setConstructorArgs([new TwigRenderServices(), $this->getTestRequest()])
       ->getMock();
-//    $mockController->expects($this->once())
-//      ->with('catalog', ['items' => $this->dataForTest()])
-//      ->willReturn($mockController->renderer->renderTmpl('catalog', ['items' => $this->dataForTest()]));
+    $mockController->expects($this->once())
+      ->method('render')
+      ->with('catalog', ['items' => $this->dataForTest()])
+      ->willReturn($mockController->renderer->renderTmpl('catalog', ['items' => $this->dataForTest()]));
 //
 //    $result = $mockController->render('catalog', [
 //      'items' => $this->dataForTest()
