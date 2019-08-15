@@ -1,0 +1,22 @@
+{
+  "name": "iborisov/php2",
+  "description": "php2",
+  "type": "project",
+  "authors": [
+    {
+      "name": "Igor Borisov",
+      "email": "latentpickuper@gmail.com"
+    }
+  ],
+  "require": {
+    "twig/twig": "^2.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "app\\" : "./"
+    }
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^7"
+  }
+}

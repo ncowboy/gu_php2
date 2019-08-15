@@ -1,0 +1,55 @@
+{% extends 'layouts/main.twig' %}
+{% block body %}
+  <h1 class="text-center">Регистрация</h1>
+  <div class="row mt-5">
+    <div class="col-md-4 offset-md-4">
+      <form method="post">
+        <fieldset>
+          <legend>Учетные данные</legend>
+          <div class="form-group">
+            <input type="text" class="form-control" name="login" placeholder="Логин">
+            <div class="text-danger">
+              {{ errors.login }}
+            </div>
+          </div>
+          <div class="form-group">
+            <input type="password" class="form-control" name="password" placeholder="Пароль">
+            <div class="text-danger">
+              {{ errors.password }}
+            </div>
+          </div>
+        </fieldset>
+        <fieldset>
+          <legend>Дополнительная информация</legend>
+          <div class="form-group">
+            <input type="text" class="form-control" name="name" placeholder="Имя">
+            <div class="text-danger">
+              {{ errors.name }}
+            </div>
+          </div>
+          <div class="form-group">
+            <input type="email" class="form-control" name="email" placeholder="email">
+            <div class="text-danger">
+              {{ errors.email }}
+            </div>
+          </div>
+          <div class="form-group">
+            <input type="text" class="form-control" name="phone" placeholder="Телефон">
+            <div class="text-danger">
+              {{ errors.phone }}
+            </div>
+          </div>
+          <div class="form-group">
+            <input type="text" class="form-control" name="address" placeholder="Адрес">
+            <div class="text-danger">
+              {{ errors.address }}
+            </div>
+          </div>
+        </fieldset>
+        <button type="submit" class="btn btn-success">Зарегистрироваться</button>
+      </form>
+      <div class="text-danger">
+      </div>
+    </div>
+  </div>
+{% endblock %}
