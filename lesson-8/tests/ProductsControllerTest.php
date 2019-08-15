@@ -4,8 +4,6 @@ namespace app\tests;
 
 use app\controllers\ProductsController;
 use app\models\entities\Product;
-use app\models\repositories\ProductRepository;
-use app\services\Controller;
 use app\services\renders\TwigRenderServices;
 use app\services\Request;
 
@@ -13,42 +11,36 @@ class ProductsControllerTest extends \PHPUnit\Framework\TestCase
 {
   public function testIndexActionCase()
   {
+    $twigService = new TwigRenderServices();
     $mockController = $this->getMockBuilder(ProductsController::class)
-      ->setConstructorArgs([new TwigRenderServices(), $this->getTestRequest()])
+      ->setConstructorArgs([$twigService, $this->getTestRequest('products/index')])
       ->getMock();
-    $mockController->expects($this->once())
+    $mockController->expects($this->any())
       ->method('render')
       ->with('catalog', ['items' => $this->dataForTest()])
-      ->willReturn($mockController->renderer->renderTmpl('catalog', ['items' => $this->dataForTest()]));
-//
-//    $result = $mockController->render('catalog', [
-//      'items' => $this->dataForTest()
-//    ]);
-   var_dump($mockController->render('catalog', [
+      ->willReturn($twigService->renderTmpl('catalog', ['items' => $this->dataForTest()]));
+
+    $result = $mockController->render('catalog', [
       'items' => $this->dataForTest()
-    ]));
-
-
-//
-//    $controller = new $mockController();
-//    echo $controller->render('catalog', [
-//      'items' => $mockProducts->getAll()
-//    ]);
+    ]);
+    $this->assertNotEmpty($result);
   }
 
   public function testViewActionCase()
   {
-    $mock = $this->getMockBuilder(ProductRepository::class)
-      ->disableOriginalConstructor()
-      ->setMethods(['getOne'])->getMock();
+    $twigService = new TwigRenderServices();
+    $mockController = $this->getMockBuilder(ProductsController::class)
+      ->setConstructorArgs([$twigService, $this->getTestRequest('products/view?id=1')])
+      ->getMock();
+    $mockController->expects($this->any())
+      ->method('render')
+      ->with('product', ['item' => $this->dataForTest()[1]])
+      ->willReturn($twigService->renderTmpl('product', ['item' => $this->dataForTest()[1]]));
 
-    $mock->expects($this->once())
-      ->method('getOne')
-      ->with(1)
-      ->willReturn($this->dataForTest()[0]);
-    $result = $mock->getOne(1);
-    $this->assertIsObject($result);
-
+    $result = $mockController->render('product', [
+      'item' => $this->dataForTest()[1]
+    ]);
+    $this->assertNotEmpty($result);
   }
 
   public function dataForTest()
@@ -68,17 +60,17 @@ class ProductsControllerTest extends \PHPUnit\Framework\TestCase
     return [$product, $product2];
   }
 
-  public function getTestRequest()
+  public function getTestRequest($request)
   {
     $reflectionRequest = new \ReflectionClass(Request::class);
     $reflectionRequestString = $reflectionRequest->getProperty('requestString');
     $reflectionParseMethod = $reflectionRequest->getMethod('parseRequest');
     $reflectionParseMethod->setAccessible(true);
     $reflectionRequestString->setAccessible(true);
-    $request = new Request();
-    $reflectionRequestString->setValue($request, '/products/index');
-    $reflectionParseMethod->invoke($request);
-    return $request;
+    $requestObject = new Request();
+    $reflectionRequestString->setValue($requestObject, $request);
+    $reflectionParseMethod->invoke($requestObject);
+    return $requestObject;
   }
 
 
